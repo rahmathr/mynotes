@@ -193,7 +193,7 @@ Project ini dibuat sebagai media pembelajaran dan implementasi:
 
 ## 👨‍💻 Developer
 
-**Rahmat Hidayat**
+**Izza Adian Ahmad**
 
 Mahasiswa Teknologi Informasi yang sedang belajar pengembangan aplikasi web menggunakan Laravel.
 
