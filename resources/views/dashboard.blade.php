@@ -6,7 +6,7 @@
 {{-- ── Sapaan ──────────────────────────────────────────── --}}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h4 class="fw-bold mb-1">👋 Halo, {{ Auth::user()->name }}!</h4>
+        <h4 class="fw-bold mb-1">Halo, {{ Auth::user()->name }}!</h4>
         <p class="text-muted mb-0">Selamat datang kembali di MyNotes</p>
     </div>
     <div class="d-flex gap-2">
@@ -119,21 +119,15 @@
     {{-- Badge status breakdown --}}
     <div class="d-flex gap-2 flex-wrap">
         <span class="badge bg-warning text-dark px-3 py-2">
-            <i class="bi bi-hourglass-split"></i> Pending: {{ $pendingTasks }}
+            <i class="bi bi-hourglass-split"></i> Tertunda: {{ $pendingTasks }}
         </span>
         <span class="badge bg-info px-3 py-2">
-            <i class="bi bi-arrow-clockwise"></i> In Progress: {{ $inProgressTasks }}
+            <i class="bi bi-arrow-clockwise"></i> Sedang berjalan: {{ $inProgressTasks }}
         </span>
         <span class="badge bg-success px-3 py-2">
             <i class="bi bi-check-circle"></i> Selesai: {{ $completedTasks }}
         </span>
     </div>
-
-    @if($progressPercent === 100 && $totalTasks > 0)
-        <div class="alert alert-success mt-3 mb-0 py-2">
-            🎉 <strong>Luar biasa!</strong> Semua tugas sudah selesai!
-        </div>
-    @endif
 </div>
 
 {{-- ── Catatan Terbaru & Tugas Terbaru ────────────────── --}}
@@ -159,7 +153,7 @@
                             </small>
                         </div>
                         <p class="text-muted small mb-0 mt-1">
-                            {{ Str::limit($note->content, 70) }}
+                            {{ Str::limit(strip_tags($note->content), 70) }}
                         </p>
                     </div>
                 </a>

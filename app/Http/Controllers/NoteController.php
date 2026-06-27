@@ -3,138 +3,142 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\NoteHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
-    /**
-     * INDEX - Tampilkan daftar semua catatan milik user yang sedang login
-     * URL: GET /notes
-     */
+    // tampilkan daftar catatan + fitur search
     public function index(Request $request)
     {
-        // Ambil catatan milik user yang login saja
         $query = Note::where('user_id', Auth::id());
 
-        // Fitur Search: jika ada parameter 'search' di URL
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', '%' . $search . '%')   // cari di judul
-                  ->orWhere('content', 'like', '%' . $search . '%'); // atau di isi
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('content', 'like', '%' . $search . '%');
             });
         }
 
-        // Ambil data terbaru dulu, tampilkan 9 per halaman
         $notes = $query->latest()->paginate(9);
 
         return view('notes.index', compact('notes'));
     }
 
-    /**
-     * CREATE - Tampilkan form buat catatan baru
-     * URL: GET /notes/create
-     */
+    // tampilkan form buat catatan baru
     public function create()
     {
         return view('notes.create');
     }
 
-    /**
-     * STORE - Simpan catatan baru ke database
-     * URL: POST /notes
-     */
+    // simpan catatan baru
     public function store(Request $request)
     {
-        // Validasi input dari form
         $request->validate([
-            'title'   => 'required|string|max:255',  // wajib, teks, maks 255 karakter
-            'content' => 'required|string',           // wajib, teks
+            'title' => 'required|string|max:255',
+            'color' => 'nullable|string|max:7',
         ]);
 
-        // Simpan catatan baru
+        // cek konten tidak kosong setelah strip HTML dari Quill editor
+        $isiCatatan = strip_tags($request->input('content', ''));
+        if (empty(trim($isiCatatan))) {
+            return back()->withErrors(['content' => 'Isi catatan tidak boleh kosong'])->withInput();
+        }
+
         Note::create([
-            'user_id' => Auth::id(),      // ID user yang sedang login
-            'title'   => $request->input('title'),
+            'user_id' => Auth::id(),
+            'title'   => $request->title,
             'content' => $request->input('content'),
+            'color'   => $request->input('color', '#ffffff'),
         ]);
 
-        // Redirect ke halaman daftar catatan dengan pesan sukses
         return redirect()->route('notes.index')
                          ->with('success', 'Catatan berhasil dibuat!');
     }
 
-    /**
-     * SHOW - Tampilkan detail satu catatan
-     * URL: GET /notes/{id}
-     */
+    // tampilkan detail catatan
     public function show(Note $note)
     {
-        // Cek apakah catatan ini milik user yang login
-        // Jika bukan miliknya, tolak akses (403 Forbidden)
         if ($note->user_id !== Auth::id()) {
-            abort(403, 'Kamu tidak punya akses ke catatan ini.');
+            abort(403);
         }
 
         return view('notes.show', compact('note'));
     }
 
-    /**
-     * EDIT - Tampilkan form edit catatan
-     * URL: GET /notes/{id}/edit
-     */
+    // tampilkan form edit catatan
     public function edit(Note $note)
     {
-        // Pastikan catatan milik user yang login
         if ($note->user_id !== Auth::id()) {
-            abort(403, 'Kamu tidak punya akses ke catatan ini.');
+            abort(403);
         }
 
         return view('notes.edit', compact('note'));
     }
 
-    /**
-     * UPDATE - Simpan perubahan catatan ke database
-     * URL: PUT /notes/{id}
-     */
+    // simpan perubahan catatan + otomatis simpan versi lama ke history
     public function update(Request $request, Note $note)
     {
-        // Pastikan catatan milik user yang login
         if ($note->user_id !== Auth::id()) {
-            abort(403, 'Kamu tidak punya akses ke catatan ini.');
+            abort(403);
         }
 
-        // Validasi input
         $request->validate([
-            'title'   => 'required|string|max:255',
-            'content' => 'required|string',
+            'title' => 'required|string|max:255',
+            'color' => 'nullable|string|max:7',
         ]);
 
-        // Update data catatan
+        // cek konten tidak kosong
+        $isiCatatan = strip_tags($request->input('content', ''));
+        if (empty(trim($isiCatatan))) {
+            return back()->withErrors(['content' => 'Isi catatan tidak boleh kosong'])->withInput();
+        }
+
+        // simpan versi lama ke tabel note_histories dulu
+        // supaya bisa dilihat lagi nanti kalau mau
+        NoteHistory::create([
+            'note_id' => $note->id,
+            'user_id' => Auth::id(),
+            'title'   => $note->title,
+            'content' => $note->content,
+        ]);
+
+        // baru update ke versi baru
         $note->update([
-            'title'   => $request->input('title'),
+            'title'   => $request->title,
             'content' => $request->input('content'),
+            'color'   => $request->input('color', $note->color),
         ]);
 
         return redirect()->route('notes.index')
                          ->with('success', 'Catatan berhasil diperbarui!');
     }
 
-    /**
-     * DESTROY - Hapus catatan dari database
-     * URL: DELETE /notes/{id}
-     */
+    // hapus catatan
     public function destroy(Note $note)
     {
-        // Pastikan catatan milik user yang login
         if ($note->user_id !== Auth::id()) {
-            abort(403, 'Kamu tidak punya akses ke catatan ini.');
+            abort(403);
         }
 
         $note->delete();
 
         return redirect()->route('notes.index')
                          ->with('success', 'Catatan berhasil dihapus!');
+    }
+
+    // tampilkan riwayat perubahan catatan
+    public function history(Note $note)
+    {
+        if ($note->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // ambil semua riwayat, paling baru ditampilkan duluan
+        $histories = $note->histories()->latest()->get();
+
+        return view('notes.history', compact('note', 'histories'));
     }
 }

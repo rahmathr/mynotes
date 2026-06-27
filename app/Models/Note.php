@@ -9,22 +9,24 @@ class Note extends Model
 {
     use HasFactory;
 
-    /**
-     * Kolom-kolom yang boleh diisi secara massal (mass assignment)
-     * Wajib diisi agar tidak kena MassAssignmentException
-     */
+    // tambah 'color' ke fillable karena ada fitur tema warna baru
     protected $fillable = [
         'user_id',
         'title',
         'content',
+        'color',
     ];
 
-    /**
-     * Relasi: Satu catatan dimiliki oleh satu user
-     * Digunakan untuk: $note->user (mengambil data user pemilik catatan)
-     */
+    // relasi ke user
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // relasi ke riwayat perubahan
+    // satu catatan bisa punya banyak riwayat
+    public function histories()
+    {
+        return $this->hasMany(NoteHistory::class);
     }
 }

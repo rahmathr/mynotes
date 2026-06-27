@@ -95,15 +95,15 @@
                             required>
                             <option value="pending"
                                 {{ old('status', $task->status) === 'pending' ? 'selected' : '' }}>
-                                ⏳ Pending
+                                Tertunda
                             </option>
                             <option value="in_progress"
                                 {{ old('status', $task->status) === 'in_progress' ? 'selected' : '' }}>
-                                🔄 In Progress
+                                Sedang berjalan
                             </option>
                             <option value="completed"
                                 {{ old('status', $task->status) === 'completed' ? 'selected' : '' }}>
-                                ✅ Selesai
+                                Selesai
                             </option>
                         </select>
                         @error('status')

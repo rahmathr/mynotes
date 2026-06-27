@@ -60,7 +60,7 @@ class TaskController extends Controller
         ]);
 
         return redirect()->route('tasks.index')
-                         ->with('success', 'Tugas berhasil ditambahkan!');
+                         ->with('Berhasil untuk di selesaikan');
     }
 
     /**

@@ -73,8 +73,7 @@
 
                             <div>
                                 {{-- Judul tugas (coretan jika selesai) --}}
-                                <p class="fw-semibold mb-0
-                                    {{ $task->status === 'completed' ? 'text-decoration-line-through text-muted' : '' }}">
+                                <p class="fw-semibold mb-0 {{ $task->status === 'completed' ? 'text-decoration-line-through text-success' : '' }}">
                                     {{ $task->title }}
                                 </p>
                                 {{-- Deskripsi singkat --}}

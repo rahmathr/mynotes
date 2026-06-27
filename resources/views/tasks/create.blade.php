@@ -96,15 +96,15 @@
                             <option value="" disabled selected>── Pilih Status ──</option>
                             <option value="pending"
                                 {{ old('status') === 'pending' ? 'selected' : '' }}>
-                                ⏳ Pending
+                                Tertunda
                             </option>
                             <option value="in_progress"
                                 {{ old('status') === 'in_progress' ? 'selected' : '' }}>
-                                🔄 In Progress
+                                Sedang berjalan
                             </option>
                             <option value="completed"
                                 {{ old('status') === 'completed' ? 'selected' : '' }}>
-                                ✅ Selesai
+                                Selesai
                             </option>
                         </select>
                         @error('status')
