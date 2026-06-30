@@ -8,11 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * INDEX - Tampilkan daftar semua tugas milik user yang login
-     * Bisa difilter berdasarkan status
-     * URL: GET /tasks  atau  GET /tasks?status=pending
-     */
+    
     public function index(Request $request)
     {
         $query = Task::where('user_id', Auth::id());
@@ -28,19 +24,13 @@ class TaskController extends Controller
         return view('tasks.index', compact('tasks'));
     }
 
-    /**
-     * CREATE - Tampilkan form tambah tugas baru
-     * URL: GET /tasks/create
-     */
+    
     public function create()
     {
         return view('tasks.create');
     }
 
-    /**
-     * STORE - Simpan tugas baru ke database
-     * URL: POST /tasks
-     */
+   
     public function store(Request $request)
     {
         // Validasi input dari form
@@ -60,13 +50,10 @@ class TaskController extends Controller
         ]);
 
         return redirect()->route('tasks.index')
-                         ->with('Berhasil untuk di selesaikan');
+                         ->with('success', 'Tugas berhasil ditambahkan!');
     }
 
-    /**
-     * EDIT - Tampilkan form edit tugas
-     * URL: GET /tasks/{id}/edit
-     */
+    
     public function edit(Task $task)
     {
         if ($task->user_id !== Auth::id()) {
@@ -76,10 +63,7 @@ class TaskController extends Controller
         return view('tasks.edit', compact('task'));
     }
 
-    /**
-     * UPDATE - Simpan perubahan tugas ke database
-     * URL: PUT /tasks/{id}
-     */
+   
     public function update(Request $request, Task $task)
     {
         if ($task->user_id !== Auth::id()) {
@@ -104,10 +88,7 @@ class TaskController extends Controller
                          ->with('success', 'Tugas berhasil diperbarui!');
     }
 
-    /**
-     * DESTROY - Hapus tugas dari database
-     * URL: DELETE /tasks/{id}
-     */
+    
     public function destroy(Task $task)
     {
         if ($task->user_id !== Auth::id()) {
@@ -120,20 +101,17 @@ class TaskController extends Controller
                          ->with('success', 'Tugas berhasil dihapus!');
     }
 
-    /**
-     * COMPLETE - Tandai tugas sebagai selesai (tombol cepat)
-     * URL: PATCH /tasks/{id}/complete
-     */
+   
     public function complete(Task $task)
     {
         if ($task->user_id !== Auth::id()) {
             abort(403, 'Kamu tidak punya akses ke tugas ini.');
         }
 
-        // Ubah status menjadi 'completed'
+        
         $task->update(['status' => 'completed']);
 
         return redirect()->route('tasks.index')
-                         ->with('success', 'Tugas berhasil ditandai selesai! 🎉');
+                         ->with('success', 'Tugas berhasil ditandai selesai!');
     }
 }

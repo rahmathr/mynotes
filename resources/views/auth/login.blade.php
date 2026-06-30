@@ -1,47 +1,90 @@
 <x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <div class="auth-card card p-4">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        {{-- logo dan judul --}}
+        <div class="text-center mb-4">
+            <div class="brand-name mb-1">
+                <i class="bi bi-journal-richtext"></i> MyNotes
+            </div>
+            <p class="text-muted small mb-0">Masuk ke akunmu</p>
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        {{-- pesan status (misal setelah reset password) --}}
+        @if (session('status'))
+            <div class="alert alert-success py-2 small">
+                {{ session('status') }}
+            </div>
+        @endif
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            {{-- email --}}
+            <div class="mb-3">
+                <label for="email" class="form-label fw-semibold">
+                    Email
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    class="form-control @error('email') is-invalid @enderror"
+                    value="{{ old('email') }}"
+                    placeholder="contoh@email.com"
+                    required
+                    autofocus>
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+            {{-- password --}}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <label for="password" class="form-label fw-semibold mb-0">
+                        Password
+                    </label>
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="link-ungu small">
+                            Lupa password?
+                        </a>
+                    @endif
+                </div>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    class="form-control mt-1 @error('password') is-invalid @enderror"
+                    placeholder="Masukkan password"
+                    required>
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+            {{-- ingat saya --}}
+            <div class="mb-4 form-check">
+                <input type="checkbox" name="remember" id="remember" class="form-check-input">
+                <label for="remember" class="form-check-label text-muted small">
+                    Ingat saya
+                </label>
+            </div>
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
+            {{-- tombol login --}}
+            <button type="submit" class="btn btn-primary w-100 fw-semibold py-2">
+                Masuk
+            </button>
+
+            {{-- link ke register --}}
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    Belum punya akun?
+                    <a href="{{ route('register') }}" class="link-ungu">
+                        Daftar sekarang
+                    </a>
+                </small>
+            </div>
+
+        </form>
+    </div>
 </x-guest-layout>
