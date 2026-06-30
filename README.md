@@ -37,7 +37,7 @@ Modern · Personal · Dibangun dengan Laravel
 
 | Login | Register |
 |:---:|:---:|
-| <img src="screenshots/login.png" width="380"> | <img src="screenshots/register.png" width="380"> |
+| <img src="screenshots/login.jpeg" width="380"> | <img src="screenshots/register.jpeg" width="380"> |
 
 | Dashboard |
 |:---:|
