@@ -4,13 +4,18 @@
 <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP">
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL">
 <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
+<img src="https://img.shields.io/badge/Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" alt="Railway">
 
-<br>
+<br><br>
 
 # 📝 MyNotes
 
 **Satu aplikasi untuk semua kebutuhanmu — catat ide, kelola tugas, pantau progress.**
 Modern · Personal · Dibangun dengan Laravel
+
+<br>
+
+[![Live Demo](https://img.shields.io/badge/🌐%20Live%20Demo-Klik%20di%20sini-6c63ff?style=for-the-badge)](https://mynotes-production-1cc5.up.railway.app)
 
 <br>
 
@@ -28,6 +33,16 @@ Modern · Personal · Dibangun dengan Laravel
 | ✅ **Tugas** | CRUD lengkap · Status Tertunda / Sedang Berjalan / Selesai · Filter status · Deadline dengan indikator otomatis · Tandai selesai sekali klik |
 | 📊 **Dashboard** | Statistik catatan & tugas real-time · Progress bar penyelesaian tugas · Daftar aktivitas terbaru |
 | 🔐 **Autentikasi** | Login & registrasi dengan tampilan kustom · Proteksi data antar pengguna · Logout aman |
+
+---
+
+## 🌐 Demo Online
+
+Aplikasi sudah dapat diakses secara publik tanpa perlu instalasi:
+
+👉 **https://mynotes-production-1cc5.up.railway.app**
+
+> Silakan daftar akun baru untuk mencoba semua fitur.
 
 ---
 
@@ -61,6 +76,7 @@ Modern · Personal · Dibangun dengan Laravel
 - ✍️ **Rich Text Editor** — format teks dengan bold, italic, underline, strikethrough, link, dan list
 - 🕓 **Riwayat Perubahan** — setiap edit catatan otomatis tersimpan, bisa dilihat kapan saja
 - 💜 **Tampilan Auth Kustom** — halaman login & register bertema ungu MyNotes, bukan lagi default Laravel
+- 🚀 **Online & Dapat Diakses Publik** — di-deploy di Railway
 
 ---
 
@@ -73,10 +89,11 @@ Modern · Personal · Dibangun dengan Laravel
 | Frontend | Bootstrap 5 · Blade Template Engine |
 | Editor | Quill.js (Rich Text Editor) |
 | Tanggal | Carbon |
+| Hosting | Railway |
 
 ---
 
-## 📦 Instalasi
+## 📦 Instalasi Lokal
 
 ### Prasyarat
 
@@ -223,9 +240,10 @@ Project ini dibuat sebagai implementasi nyata dari:
 - ✅ CRUD — Create, Read, Update, Delete
 - ✅ Relasi Database — One to Many
 - ✅ Eloquent ORM & Query Builder
-- ✅ Rich Text Editor Integration
+- ✅ Rich Text Editor Integration (Quill.js)
 - ✅ Dashboard Statistik Real-time
 - ✅ UI Responsif dengan Bootstrap 5
+- ✅ Deploy ke production server (Railway)
 
 ---
 
@@ -251,6 +269,6 @@ Project ini dibuat untuk kebutuhan pembelajaran mata kuliah Web Programming 2.
 
 <div align="center">
 
-Made with 💜 using Laravel
+Made with 💜 using Laravel · Hosted on Railway
 
 </div>
